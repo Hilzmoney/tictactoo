@@ -20,7 +20,7 @@
 |  
 A cli tic tac toe game.
 ```sh
-docker run -it tictactoe:latest
+docker run -it --rm tictactoe
 ```
 
 ---

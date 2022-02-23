@@ -6,11 +6,13 @@ export async function prompt(
     clearBuffer: boolean = false,
     readStream: NodeJS.ReadStream = process.stdin,
     encoding: BufferEncoding = "utf8",
+    timoutMillis: number = 1000 * 60 * 5,
+    timeoutMessage: string = "Prompt input timeout!",
 ): Promise<string> {
     while (currentPromise) {
         await currentPromise
     }
-    currentPromise = new Promise((res) => {
+    currentPromise = new Promise((res, rej) => {
         if (typeof message == "string") {
             console.log(message)
         }
@@ -20,8 +22,18 @@ export async function prompt(
         const removeListener = () => {
             readStream.removeListener("data", onDate)
             readStream.removeListener("end", onEnd)
+            clearTimeout(timeout)
         }
         let end: boolean = false
+        const timeout = setTimeout(() => {
+            if (end) {
+                return
+            }
+            process.stdin.pause()
+            end = true
+            removeListener()
+            rej(new Error(timeoutMessage))
+        }, timoutMillis);
         const onDate = (data: Buffer) => {
             if (end) {
                 return
