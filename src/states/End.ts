@@ -1,5 +1,6 @@
 import { TicTacToeGame, TicTacToeState } from "../TicTacToeGame"
 import { prompt } from "../prompt"
+import { exec } from 'child_process';
 
 const theWinnerIsAsciiArt: string[] = [
     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
@@ -59,7 +60,10 @@ export class EndState implements TicTacToeState {
             console.log(theWinnerIsAsciiArt.join("\n"))
             console.log(playerYWonAsciiArt.join("\n"))
         }
-        await prompt("TicTacToe| Press enter key to start the game")
+        const input = await prompt("TicTacToe| Press enter key to start the game (enter 'quit' to exit)")
+        if (input.toLowerCase().includes("quit")) {
+            process.exit(0)
+        }
         game.clear()
         game.setState(TicTacToeGame.splashState)
         game.handleSplash()

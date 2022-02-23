@@ -39,7 +39,10 @@ export class SplashState implements TicTacToeState {
 
     async handleSplash(game: TicTacToeGame): Promise<void> {
         this.printStartScreen()
-        await prompt("TicTacToe| Press enter key to start the game")
+        const input = await prompt("TicTacToe| Press enter key to start the game (enter 'quit' to exit)")
+        if (input.toLowerCase().includes("quit")) {
+            process.exit(0)
+        }
         game.setState(TicTacToeGame.turnXState)
         game.handleTurnX()
     }
