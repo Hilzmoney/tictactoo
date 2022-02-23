@@ -48,7 +48,11 @@ export class EndState implements TicTacToeState {
         const winner = game.getWinner()
         if (!winner) {
             if (game.isFull()) {
-                console.log("TIE! No winner!")
+                console.log("      //// // ///////  ")
+                console.log("     //// // ///////   ")
+                console.log("    TIE! No winner!    ")
+                console.log("   //// // ///////     ")
+                console.log("  //// // ///////      ")
             } else {
                 throw new Error("Game end state but board is not full")
             }
