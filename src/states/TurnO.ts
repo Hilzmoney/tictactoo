@@ -1,5 +1,5 @@
 import { TicTacToeGame, TicTacToeState } from "../TicTacToeGame"
-import { promptNumberBetween } from "../prompt"
+import { prompt, promptNumberBetween } from "../prompt"
 
 export class TurnOState implements TicTacToeState {
     handleTurnX(game: TicTacToeGame): void {
@@ -16,7 +16,10 @@ export class TurnOState implements TicTacToeState {
             if (game.getField(row, col) == " ") {
                 break
             }
-            console.log("The field is already taken!")
+            const input = await prompt("The field is already taken!\nEnter to continue (enter 'quit' to exit)")
+            if (input.toLowerCase().includes("quit")) {
+                process.exit(0)
+            }
         }
 
         game.setField(row, col, "O")
