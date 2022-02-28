@@ -103,7 +103,7 @@ export async function promptNumberBetween(
 
 // function prompt boolean (yes/no)
 export async function promptBoolean(
-    message: string,
+    message?: string,
     trueValues: string[] = ["yes", "y", "true", "t", "1", "on"],
     falseValues: string[] = ["no", "n", "false", "f", "0", "off"],
     errorMessage: string = "The value must be $TRUE or $FALSE!",
