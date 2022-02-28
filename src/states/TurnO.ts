@@ -1,42 +1,49 @@
-import { TicTacToeGame, TicTacToeState } from "../TicTacToeGame"
-import { prompt, promptNumberBetween } from "../prompt"
+import { promptBoolean } from '../prompt';
+import { TicTacToeGame } from '../TicTacToeGame';
+import { TicTacToeState } from '../TicTacToeState';
 
 export class TurnOState implements TicTacToeState {
-    handleTurnX(game: TicTacToeGame): void {
-        throw new Error("Try to handle Player Y with but its not your turn")
+    onEnable(game: TicTacToeGame): Promise<void> | void {
+        game.printFields()
+        console.log("Player O | Enter row and column: ('<R>,<C>')")
+        game.handleInput()
     }
 
-    async handleTurnO(game: TicTacToeGame): Promise<void> {
-        game.printFields()
-        let row: number
-        let col: number
-        while (true) {
-            row = -1 + await promptNumberBetween("TicTacToe| Player O| Enter row: ", 1, 3, "The value must be between 1 and 3!")
-            col = -1 + await promptNumberBetween("TicTacToe| Player O| Enter column: ", 1, 3, "The value must be between 1 and 3!")
-            if (game.getField(row, col) == " ") {
-                break
-            }
-            const input = await prompt("The field is already taken!\nEnter to continue (enter 'quit' to exit)")
-            if (input.toLowerCase().includes("quit")) {
-                process.exit(0)
-            }
-        }
-
+    selectField(game: TicTacToeGame, row: number, col: number): Promise<void> | void {
         game.setField(row, col, "O")
-        if (game.isOver()) {
+        if (game.getWinner() || game.isFull()) {
             game.setState(TicTacToeGame.endState)
-            game.handleEnd()
+        } else {
+            game.setState(TicTacToeGame.turnXState)
+        }
+    }
+
+    async exit(game: TicTacToeGame): Promise<void> {
+        if (!await promptBoolean("Player O | Do you really want to quit the current game?")) {
             return
         }
+        console.log("Player O | Exit game...")
+        process.exit(0)
+    }
+
+    async restart(game: TicTacToeGame): Promise<void> {
+        if (!await promptBoolean("Player O | Do you really want to restart this game?")) {
+            return
+        }
+        console.log("Player O | Restart game...")
+        game.setState(TicTacToeGame.splashState)
+    }
+
+    async surrender(game: TicTacToeGame): Promise<void> {
+        if (!await promptBoolean("Player O | Do you really want to surrender?")) {
+            return
+        }
+        console.log("Player O | Surrender game...")
+        game.setWinner("X")
+        game.setState(TicTacToeGame.endState)
+    }
+
+    enter(game: TicTacToeGame): Promise<void> | void {
         game.setState(TicTacToeGame.turnXState)
-        game.handleTurnX()
-    }
-
-    handleEnd(game: TicTacToeGame): void {
-        throw new Error("Can't end game in running TurnO state")
-    }
-
-    handleSplash(game: TicTacToeGame): void {
-        throw new Error("Game is already in running")
     }
 }

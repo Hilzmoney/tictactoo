@@ -33,7 +33,7 @@ export async function prompt(
             end = true
             removeListener()
             rej(new Error(timeoutMessage))
-        }, timoutMillis);
+        }, timoutMillis)
         const onDate = (data: Buffer) => {
             if (end) {
                 return

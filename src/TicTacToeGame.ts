@@ -2,13 +2,8 @@ import { SplashState } from "./states/Splash"
 import { EndState } from "./states/End"
 import { TurnOState } from "./states/TurnO"
 import { TurnXState } from "./states/TurnX"
-
-export interface TicTacToeState {
-    handleTurnX(game: TicTacToeGame): Promise<void> | void
-    handleTurnO(game: TicTacToeGame): Promise<void> | void
-    handleEnd(game: TicTacToeGame): Promise<void> | void
-    handleSplash(game: TicTacToeGame): Promise<void> | void
-}
+import { prompt } from "./prompt"
+import { TicTacToeState } from './TicTacToeState';
 
 export type PlayerValue = "X" | "O"
 export type FieldValue = PlayerValue | " "
@@ -34,16 +29,25 @@ export class TicTacToeGame {
     public static readonly turnOState: TurnOState = new TurnOState()
     public static readonly turnXState: TurnXState = new TurnXState()
 
+    private exitMessages: string[] = ["exit", "quit", "close"]
+    private restartMessages: string[] = ["restart", "renew", "play again"]
+    private surrenderMessages: string[] = ["surrender", "give up"]
+    private winner: PlayerValue | undefined = undefined
     private state: TicTacToeState = TicTacToeGame.splashState
     private readonly board: FieldValue[] = [
         " ", " ", " ",
         " ", " ", " ",
-        " ", " ", " "
+        " ", " ", " ",
     ]
 
     // TickTacToe methods
     clear(): void {
         this.board.fill(" ")
+        this.winner = undefined
+    }
+
+    setWinner(player: PlayerValue): void {
+        this.winner = player
     }
 
     setField(x: number, y: number, value: FieldValue): void {
@@ -75,37 +79,91 @@ export class TicTacToeGame {
     }
 
     getWinner(): PlayerValue | undefined {
-        for (const line of ticTacToeLines) {
-            const [x, y, z] = line
-            if (
-                this.board[x] !== " " &&
-                this.board[x] === this.board[y] &&
-                this.board[x] === this.board[z]
-            ) {
-                return this.board[x] as PlayerValue
+        if (!this.winner) {
+            for (const line of ticTacToeLines) {
+                const [x, y, z] = line
+                if (
+                    this.board[x] !== " " &&
+                    this.board[x] === this.board[y] &&
+                    this.board[x] === this.board[z]
+                ) {
+                    this.winner = this.board[x] as PlayerValue
+                }
             }
         }
-        return undefined
+        return this.winner
+    }
+
+    start(): void {
+        this.clear()
+        this.setState(TicTacToeGame.splashState)
     }
 
     // StateMachine methods
     async setState(state: TicTacToeState): Promise<void> {
         this.state = state
+        await this.state.onEnable(this)
     }
 
-    async handleTurnX(): Promise<void> {
-        await this.state.handleTurnX(this)
+    async selectField(row: number, col: number): Promise<void> {
+        await this.state.selectField(this, row, col)
     }
 
-    async handleTurnO(): Promise<void> {
-        await this.state.handleTurnO(this)
+    async exit(): Promise<void> {
+        await this.state.exit(this)
     }
 
-    async handleEnd(): Promise<void> {
-        await this.state.handleEnd(this)
+    async restart(): Promise<void> {
+        await this.state.restart(this)
     }
 
-    async handleSplash(): Promise<void> {
-        await this.state.handleSplash(this)
+    async surrender(): Promise<void> {
+        await this.state.surrender(this)
+    }
+
+    async enter(): Promise<void> {
+        await this.state.enter(this)
+    }
+
+    async handleInput() {
+        while (true) {
+            const input = await prompt()
+            if (input.length == 0) {
+                await this.enter()
+                return
+            } else if (this.exitMessages.includes(input.toLowerCase())) {
+                await this.exit()
+                return
+            } else if (this.restartMessages.includes(input.toLowerCase())) {
+                await this.restart()
+                return
+            } else if (this.surrenderMessages.includes(input.toLowerCase())) {
+                await this.surrender()
+                return
+            } else {
+                let splitBy: string = ""
+                if (input.includes(", ")) {
+                    splitBy = ", "
+                } else if (input.includes(" ")) {
+                    splitBy = " "
+                } else if (input.includes(",")) {
+                    splitBy = ","
+                }
+                if (splitBy.length != 0) {
+                    const splitted = input.split(splitBy)
+                    if (splitted.length == 2) {
+                        let row: number = Number(splitted[0])
+                        let col: number = Number(splitted[1])
+                        if (row < 1 || row > 3) {
+                            console.error("Row and column must be between 1 and 3")
+                            continue
+                        }
+                        await this.selectField(row - 1, col - 1)
+                        return
+                    }
+                }
+                console.log("Unknown input!\nPlease enter 'exit', 'restart', 'surrender' or the row and column numbers seperated by ','.")
+            }
+        }
     }
 }

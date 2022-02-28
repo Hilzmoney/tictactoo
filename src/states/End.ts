@@ -1,6 +1,5 @@
-import { TicTacToeGame, TicTacToeState } from "../TicTacToeGame"
-import { prompt } from "../prompt"
-import { exec } from 'child_process';
+import { TicTacToeGame } from '../TicTacToeGame';
+import { TicTacToeState } from '../TicTacToeState';
 
 const theWinnerIsAsciiArt: string[] = [
     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
@@ -34,25 +33,21 @@ const playerYWonAsciiArt = [
     "━━━━━━━┗┛━━━━━━━━━━┗━━┛━━━━━━━━━━━━━━━━━━━━━━━",
 ]
 
+const tieAsciiArt = [
+    "      //// // ///////  ",
+    "     //// // ///////   ",
+    "    TIE! No winner!    ",
+    "   //// // ///////     ",
+    "  //// // ///////      ",
+]
+
 export class EndState implements TicTacToeState {
-    handleTurnX(game: TicTacToeGame): void {
-        throw new Error("Game is not started")
-    }
-
-    handleTurnO(game: TicTacToeGame): void {
-        throw new Error("Game is not started")
-    }
-
-    async handleEnd(game: TicTacToeGame): Promise<void> {
+    onEnable(game: TicTacToeGame): Promise<void> | void {
         game.printFields()
         const winner = game.getWinner()
         if (!winner) {
             if (game.isFull()) {
-                console.log("      //// // ///////  ")
-                console.log("     //// // ///////   ")
-                console.log("    TIE! No winner!    ")
-                console.log("   //// // ///////     ")
-                console.log("  //// // ///////      ")
+                console.log(tieAsciiArt.join("\n"))
             } else {
                 throw new Error("Game end state but board is not full")
             }
@@ -64,16 +59,32 @@ export class EndState implements TicTacToeState {
             console.log(theWinnerIsAsciiArt.join("\n"))
             console.log(playerYWonAsciiArt.join("\n"))
         }
-        const input = await prompt("TicTacToe| Press enter key to start the game (enter 'quit' to exit)")
-        if (input.toLowerCase().includes("quit")) {
-            process.exit(0)
-        }
-        game.clear()
-        game.setState(TicTacToeGame.splashState)
-        game.handleSplash()
+        console.log("Press 'enter' to restart and 'exit' to exit the game.")
+        game.handleInput()
     }
 
-    handleSplash(game: TicTacToeGame): void {
-        throw new Error("Game is not started")
+    selectField(game: TicTacToeGame, row: number, col: number): Promise<void> | void {
+        console.log("That was not 'enter'!")
+        console.log("Press 'enter' to continue...")
+        game.handleInput()
+    }
+
+    exit(game: TicTacToeGame): Promise<void> | void {
+        console.log("Exit game...")
+        process.exit(0)
+    }
+
+    restart(game: TicTacToeGame): Promise<void> | void {
+        game.setState(TicTacToeGame.splashState)
+    }
+
+    surrender(game: TicTacToeGame): Promise<void> | void {
+        console.log("That was not 'enter'!")
+        console.log("Press 'enter' to continue...")
+        game.handleInput()
+    }
+
+    enter(game: TicTacToeGame): Promise<void> | void {
+        game.setState(TicTacToeGame.splashState)
     }
 }

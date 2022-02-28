@@ -1,5 +1,5 @@
-import { TicTacToeGame, TicTacToeState } from "../TicTacToeGame"
-import { prompt } from "../prompt"
+import { TicTacToeGame } from "../TicTacToeGame"
+import { TicTacToeState } from '../TicTacToeState';
 
 const ticTacToeAsciiArt: string[] = [
     " ▄▄▄▄▄▄▄ ▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ",
@@ -13,38 +13,45 @@ const ticTacToeAsciiArt: string[] = [
 ]
 
 const welcomeText: string[] = [
-    "  ___             ___  ",
-    " (o o)           (o o) ",
-    "(  V  ) welcome (  V  )",
-    "--m-m-------------m-m--",
-];
-
+    "       ___                                                ___       ",
+    "      (o o)                                              (o o)      ",
+    "     (  V  )                  welcome                   (  V  )     ",
+    "-------m-m------------------------------------------------m-m-------",
+]
 
 export class SplashState implements TicTacToeState {
-    printStartScreen() {
+    onEnable(game: TicTacToeGame): Promise<void> | void {
+        game.clear()
         ticTacToeAsciiArt.forEach(line => console.log(line))
         welcomeText.forEach(line => console.log(line))
+        console.log("Splash | Press 'enter' to start the game.")
+        game.handleInput()
     }
 
-    handleTurnX(game: TicTacToeGame): void {
-        throw new Error("Game is not started")
+    selectField(game: TicTacToeGame, row: number, col: number): Promise<void> | void {
+        console.log("Splash | That was not 'enter'!")
+        console.log("Splash | Press 'enter' to start the game...")
+        game.handleInput()
     }
 
-    handleTurnO(game: TicTacToeGame): void {
-        throw new Error("Game is not started")
+    exit(game: TicTacToeGame): Promise<void> | void {
+        console.log("Splash | Exit game...")
+        process.exit(0)
     }
 
-    handleEnd(game: TicTacToeGame): void {
-        throw new Error("Game is not started")
+    restart(game: TicTacToeGame): Promise<void> | void {
+        console.log("Splash | You cannot restart if the game is not started!")
+        console.log("Splash | Press 'enter' to start the game.")
+        game.handleInput()
     }
 
-    async handleSplash(game: TicTacToeGame): Promise<void> {
-        this.printStartScreen()
-        const input = await prompt("TicTacToe| Press enter key to start the game (enter 'quit' to exit)")
-        if (input.toLowerCase().includes("quit")) {
-            process.exit(0)
-        }
+    surrender(game: TicTacToeGame): Promise<void> | void {
+        console.log("You cannot surrender if the game is not started!")
+        console.log("Splash | Press 'enter' to start the game.")
+        game.handleInput()
+    }
+
+    enter(game: TicTacToeGame): Promise<void> | void {
         game.setState(TicTacToeGame.turnXState)
-        game.handleTurnX()
     }
 }
