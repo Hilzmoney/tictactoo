@@ -1,5 +1,5 @@
 #!/bin/bash
 
-docker run -it --rm \
+docker run -d --rm \
     --name tictactoe \
     tictactoe
