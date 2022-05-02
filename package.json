@@ -15,6 +15,10 @@
     "game",
     "tictactoe"
   ],
+  "repository": {
+    "url": "git@github.com:majo418/tictactoe.git",
+    "type": "git"
+  },
   "scripts": {
     "tsc": "tsc -p tsconfig.json",
     "start": "ts-node src/index.ts",
