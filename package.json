@@ -1,7 +1,7 @@
 {
   "name": "tictactoo",
   "description": "A nodejs cli tictactoe game",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "main": "dist/index.js",
   "author": "majo418",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "tictactoe"
   ],
   "repository": {
-    "url": "git@github.com:majo418/tictactoe.git",
+    "url": "git@github.com:majo418/tictactoo.git",
     "type": "git"
   },
   "scripts": {
@@ -31,6 +31,10 @@
     "dev": "npm run start:watch"
   },
   "devDependencies": {
+    "@types/chai": "^4",
+    "@types/mocha": "^8",
+    "chai": "^4",
+    "mocha": "^9",
     "@types/colors": "^1.2.1",
     "@types/node": "^17.0.23",
     "nodemon": "^2.0.12",
