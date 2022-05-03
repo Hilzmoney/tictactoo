@@ -1,8 +1,8 @@
 import "mocha"
 import { expect } from "chai"
 
-describe('No tests defined', () => {
+describe('No tests', () => {
     it("No tests defined", () => {
-        console.log("No tests defined")
+        expect(true).is.true
     })
 })
