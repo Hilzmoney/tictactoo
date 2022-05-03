@@ -1,7 +1,7 @@
 {
   "name": "tictactoo",
   "description": "A nodejs cli tictactoe game",
-  "version": "1.1.5",
+  "version": "1.2.1",
   "main": "dist/index.js",
   "author": "majo418",
   "license": "MIT",
