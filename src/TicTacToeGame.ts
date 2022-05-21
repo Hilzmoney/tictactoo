@@ -59,14 +59,14 @@ export class TicTacToeGame {
     }
 
     printFields(): void {
-        console.log("  | r1| r2| r3|")
-        console.log("--+---+---+---+")
-        console.log("c1| " + this.board[0] + " | " + this.board[1] + " | " + this.board[2] + " |")
-        console.log("--+---+---+---+")
-        console.log("c2| " + this.board[3] + " | " + this.board[4] + " | " + this.board[5] + " |")
-        console.log("--+---+---+---+")
-        console.log("c3| " + this.board[6] + " | " + this.board[7] + " | " + this.board[8] + " |")
-        console.log("--+---+---+---+")
+        console.info("  | r1| r2| r3|")
+        console.info("--+---+---+---+")
+        console.info("c1| " + this.board[0] + " | " + this.board[1] + " | " + this.board[2] + " |")
+        console.info("--+---+---+---+")
+        console.info("c2| " + this.board[3] + " | " + this.board[4] + " | " + this.board[5] + " |")
+        console.info("--+---+---+---+")
+        console.info("c3| " + this.board[6] + " | " + this.board[7] + " | " + this.board[8] + " |")
+        console.info("--+---+---+---+")
     }
 
     isOver(): boolean {
@@ -162,7 +162,7 @@ export class TicTacToeGame {
                         return
                     }
                 }
-                console.log("Unknown input!\nPlease enter 'exit', 'restart', 'surrender' or the row and column numbers seperated by ','.")
+                console.error("Unknown input!\nPlease enter 'exit', 'restart', 'surrender' or the row and column numbers seperated by ','.")
             }
         }
     }

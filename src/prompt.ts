@@ -14,7 +14,7 @@ export async function prompt(
     }
     currentPromise = new Promise((res, rej) => {
         if (typeof message == "string") {
-            console.log(message)
+            console.info(message)
         }
         if (clearBuffer) {
             textBuffer = ""
@@ -76,7 +76,7 @@ export async function promptNumber(
     while (true) {
         const value = Number(await prompt(message))
         if (isNaN(value)) {
-            console.log(errorMessage)
+            console.error(errorMessage)
         } else {
             return value
         }
@@ -97,7 +97,7 @@ export async function promptNumberBetween(
         if (value >= min && value <= max) {
             return value
         }
-        console.log(errorMessage)
+        console.error(errorMessage)
     }
 }
 
@@ -125,6 +125,6 @@ export async function promptBoolean(
         } else if (falseValues.includes(value.toLowerCase())) {
             return false
         }
-        console.log(errorMessage)
+        console.error(errorMessage)
     }
 }

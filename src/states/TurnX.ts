@@ -5,13 +5,13 @@ import { TicTacToeState } from '../TicTacToeState';
 export class TurnXState implements TicTacToeState {
     onEnable(game: TicTacToeGame): Promise<void> | void {
         game.printFields()
-        console.log("Player X | Enter row and column: ('<R>,<C>')")
+        console.info("Player X | Enter row and column: ('<R>,<C>')")
         game.handleInput()
     }
 
     selectField(game: TicTacToeGame, row: number, col: number): Promise<void> | void {
         if (game.getField(row, col) != " ") {
-            console.log("Player O | The field is already taken")
+            console.info("Player O | The field is already taken")
             game.handleInput()
             return
         }
@@ -25,31 +25,31 @@ export class TurnXState implements TicTacToeState {
 
     async exit(game: TicTacToeGame): Promise<void> {
         if (!await promptBoolean("Player X | Do you really want to quit the current game?")) {
-            console.log("Player X | Enter row and column: ('<R>,<C>')")
+            console.info("Player X | Enter row and column: ('<R>,<C>')")
             game.handleInput()
             return
         }
-        console.log("Player X | Exit game...")
+        console.info("Player X | Exit game...")
         process.exit(0)
     }
 
     async restart(game: TicTacToeGame): Promise<void> {
         if (!await promptBoolean("Player O | Do you really want to restart this game?")) {
-            console.log("Player X | Enter row and column: ('<R>,<C>')")
+            console.info("Player X | Enter row and column: ('<R>,<C>')")
             game.handleInput()
             return
         }
-        console.log("Player X | Restart game...")
+        console.info("Player X | Restart game...")
         game.setState(TicTacToeGame.splashState)
     }
 
     async surrender(game: TicTacToeGame): Promise<void> {
         if (!await promptBoolean("Player X | Do you really want to surrender?")) {
-            console.log("Player X | Enter row and column: ('<R>,<C>')")
+            console.info("Player X | Enter row and column: ('<R>,<C>')")
             game.handleInput()
             return
         }
-        console.log("Player X | Surrender game...")
+        console.info("Player X | Surrender game...")
         game.setWinner("O")
         game.setState(TicTacToeGame.endState)
     }

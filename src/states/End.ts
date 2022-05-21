@@ -47,30 +47,30 @@ export class EndState implements TicTacToeState {
         const winner = game.getWinner()
         if (!winner) {
             if (game.isFull()) {
-                console.log(tieAsciiArt.join("\n"))
+                console.info(tieAsciiArt.join("\n"))
             } else {
                 throw new Error("Game end state but board is not full")
             }
         }
         if (winner === "X") {
-            console.log(theWinnerIsAsciiArt.join("\n"))
-            console.log(playerXWonAsciiArt.join("\n"))
+            console.info(theWinnerIsAsciiArt.join("\n"))
+            console.info(playerXWonAsciiArt.join("\n"))
         } else if (winner === "O") {
-            console.log(theWinnerIsAsciiArt.join("\n"))
-            console.log(playerYWonAsciiArt.join("\n"))
+            console.info(theWinnerIsAsciiArt.join("\n"))
+            console.info(playerYWonAsciiArt.join("\n"))
         }
-        console.log("Press 'enter' to restart and 'exit' to exit the game.")
+        console.info("Press 'enter' to restart and 'exit' to exit the game.")
         game.handleInput()
     }
 
     selectField(game: TicTacToeGame, row: number, col: number): Promise<void> | void {
-        console.log("That was not 'enter'!")
-        console.log("Press 'enter' to continue...")
+        console.info("That was not 'enter'!")
+        console.info("Press 'enter' to continue...")
         game.handleInput()
     }
 
     exit(game: TicTacToeGame): Promise<void> | void {
-        console.log("Exit game...")
+        console.info("Exit game...")
         process.exit(0)
     }
 
@@ -79,8 +79,8 @@ export class EndState implements TicTacToeState {
     }
 
     surrender(game: TicTacToeGame): Promise<void> | void {
-        console.log("That was not 'enter'!")
-        console.log("Press 'enter' to continue...")
+        console.info("That was not 'enter'!")
+        console.info("Press 'enter' to continue...")
         game.handleInput()
     }
 
